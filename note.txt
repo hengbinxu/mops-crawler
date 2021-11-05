@@ -1,0 +1,52 @@
+ - Before IFRS
+
+# Balance Sheet
+https://emops.twse.com.tw/server-java/t05st31_e?TYPEK=all&step=show&co_id=2330&year=2012&season=4
+
+# Income Statement
+https://emops.twse.com.tw/server-java/t05st32_e?TYPEK=all&step=show&co_id=2330&year=2012&season=4
+
+# Cash Flow
+https://emops.twse.com.tw/server-java/t05st38_e?TYPEK=all&step=show&co_id=2330&year=2012&season=4
+
+# Equity Change
+https://emops.twse.com.tw/server-java/t05st35_e?TYPEK=all&step=show&co_id=2330&year=2012&season=4
+
+ - After IFRS
+
+# Balance Sheet
+https://emops.twse.com.tw/server-java/t164sb03_e?TYPEK=all&step=show&co_id=2330&year=2020&season=4&report_id=C
+
+# Income Statement
+https://emops.twse.com.tw/server-java/t164sb04_e?TYPEK=all&step=show&co_id=2330&year=2020&season=4&report_id=C
+
+# Cash Flow
+https://emops.twse.com.tw/server-java/t164sb05_e?TYPEK=all&step=show&co_id=2330&year=2020&season=4&report_id=C
+
+# Equity Change
+# https://emops.twse.com.tw/server-java/t164sb06_e?TYPEK=all&step=show&co_id=2330&year=2020&season=4&report_id=C
+
+Method: GET
+query_parameters: 
+    TYPEK: all
+    step: show
+    co_id: 2330
+    year: 2020
+    season: 4
+    report_id: C
+
+# Company detail info (POST)
+https://emops.twse.com.tw/server-java/t146sb05_e
+
+form_data: {
+    step: 0
+    caption_id: 000001
+    co_id: 2330
+    ifrs: 
+    TYPEK: sii
+    caption_id: 000001
+    YEAR: 
+}
+
+# Distribution Profile of Share Ownership 
+https://emops.twse.com.tw/server-java/t16sn02_e1?step=show&co_id=202111TX&year=2021
