@@ -13,14 +13,25 @@ class TWFiftyItem(scrapy.Item):
     weight = Field()
 
 
-class IncomeStatementItem(scrapy.Item):
+class BaseItem(scrapy.Item):
+    company_id = Field()
+    year = Field()
+    season = Field()
+    unit = Field()
+
+
+class BalanceSheetItem(BaseItem):
+    category = Field()
+    sub_categiry = Field()
+    subject = Field()
+    value = Field()
+
+
+class IncomeStatementItem(BaseItem):
     pass
 
 
-class BalanceSheetItem(scrapy.Item):
-    pass
 
-
-class CashFlowItem(scrapy.Item):
+class CashFlowItem(BaseItem):
     pass
 
