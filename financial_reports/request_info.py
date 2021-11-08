@@ -1,7 +1,13 @@
 from datetime import datetime
 
+BEFORE_IFRS_YEARS = set(range(2000, 2013))
+AFTER_IFRS_YEARS = set(range(2015, datetime.now().year))
+TOTAL_YEARS = BEFORE_IFRS_YEARS.union(AFTER_IFRS_YEARS)
 class QueryParamter():
-
+    '''
+    This class is a data model for request parameters of Mops Crawler, and
+    it also has some validation mechanism to check query parameters.
+    '''
     MINIMUM_YEAR = 2000
     LACK_YEARS = {2013, 2014}
     
@@ -57,7 +63,9 @@ class QueryParamter():
 
 
 class MopsRequestInfo():
-
+    '''
+    Get the request information of Mops crawler.
+    '''
     URL_PREFIX = 'https://emops.twse.com.tw/server-java/'
     
     SEPARATE_YEAR = 2012
