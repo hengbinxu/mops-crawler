@@ -9,7 +9,7 @@ class CompanyList():
     @classmethod
     def get_company_list(cls, file_name: Optional[str]=None) -> Generator:
         if not file_name:
-            file_name = 'tw_fifty.json'
+            file_name = 'company_info.json'
 
         file_path = os.path.join(cls.FOLDER_PATH, file_name)
         with open(file_path, 'r') as rf:
