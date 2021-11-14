@@ -28,8 +28,6 @@ class TWFifty(Spider):
     def parse(self, response: Response, **kwargs):
         response_data = json.loads(response.body.decode())
         all_company_data = response_data['Data']
-        print('-'*100)
-        print(all_company_data)
         for company_data in all_company_data:
             tw_fifty_item = TWFiftyItem()
             tw_fifty_item['company_id'] = company_data['CommKey']

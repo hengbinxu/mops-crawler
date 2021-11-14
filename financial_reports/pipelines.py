@@ -11,3 +11,8 @@ from itemadapter import ItemAdapter
 class IncomeStatementPipeline:
     def process_item(self, item, spider):
         return item
+
+
+
+# How to use different pipeline for different spider in Scrapy single project?
+# https://stackoverflow.com/questions/8372703/how-can-i-use-different-pipelines-for-different-spiders-in-a-single-scrapy-proje
