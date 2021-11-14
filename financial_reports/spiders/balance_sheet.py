@@ -16,7 +16,7 @@ class BalanceSheet(MopsSpider):
     # def start_requests(self):
     #     for url in self.start_urls:
     #         request_info = {
-    #             'company_id': '2330',
+    #             'co_id': '2330',
     #             'year': 2020,
     #             'season': 4,
     #         }
@@ -71,7 +71,7 @@ class BalanceSheet(MopsSpider):
         component, category, sub_category, subject = ['', '', '', '']
         for row in table_rows:
             balance_sheet_item = BalanceSheetItem()
-            balance_sheet_item['company_id'] = kwargs['company_id']
+            balance_sheet_item['company_id'] = kwargs['co_id']
             balance_sheet_item['year'] = kwargs['year']
             balance_sheet_item['season'] = kwargs['season']
             balance_sheet_item['unit'] = unit

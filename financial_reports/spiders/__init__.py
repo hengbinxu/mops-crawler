@@ -47,5 +47,9 @@ class MopsSpider(Spider):
         for url_info in self.start_urls:
             url = url_info['request_url']
             method = url_info['method']
-            yield Request(url, callback=self.parse, method=method, headers=self.headers)
+            query_parameters = url_info['query_parameters']
+            yield Request(
+                url, callback=self.parse,
+                method=method, cb_kwargs=query_parameters
+            )
             
