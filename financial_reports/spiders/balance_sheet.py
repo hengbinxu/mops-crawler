@@ -1,6 +1,4 @@
 from . import MopsSpider
-from scrapy import Request
-from scrapy.loader import ItemLoader
 
 from ..items import BalanceSheetItem
 
@@ -105,7 +103,7 @@ class BalanceSheet(MopsSpider):
             # After aggregate subject, it needs to reset component.
             if reset_component:
                 component = ''
-                reset_component = True
+                reset_component = False
 
             yield balance_sheet_item
 
