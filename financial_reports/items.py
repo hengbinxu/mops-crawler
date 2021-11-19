@@ -61,11 +61,13 @@ class CashFlowItem(BaseItem):
     value = Field()
 
 
-class IncomeStatementItem(BaseItem):
+class EquityChangeItem(BaseItem):
     accounting_title = Field()
     subject = Field()
     value = Field()
 
 
+class IncomeStatementItem(BaseItem):
+    pass
 
 

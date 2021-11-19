@@ -22,6 +22,7 @@ class QueryParamter():
         self.season = 4
         self.step = 'show'
         self.typek = 'all'
+        self.report_id = 'C'
 
         assert self._is_valid_year(self.year),\
             ValueError(
@@ -50,6 +51,7 @@ class QueryParamter():
             'season': self.season,
             'step': self.step,
             'TYPEK': self.typek,
+            'report_id': self.report_id,
         }
         return query_params
 
@@ -100,7 +102,15 @@ class MopsRequestInfo():
                 'after': 't164sb05_e',
             },
             'query_parameters': QueryParamter
-        } 
+        },
+        'equity_change': {
+            'method': 'GET',
+            'url_suffix': {
+                'before': '',
+                'after': 't164sb06_e',
+            },
+            'query_parameters': QueryParamter
+        }
     }
 
     def __init__(self, 
