@@ -21,6 +21,9 @@ class BalanceSheet(MopsSpider):
     #         yield Request(url, callback=self.parse, method='GET', cb_kwargs=request_info)
 
     def subject_processor(self, value: str) -> str:
+        '''
+        Data clear function to clean subjects.
+        '''
         process_funcs = [
             self.remove_space,
             self.to_lowercase,
@@ -32,6 +35,9 @@ class BalanceSheet(MopsSpider):
         return value
 
     def value_processor(self, value: str) -> str:
+        '''
+        Data clear function to clean values.
+        '''
         process_funcs = [
             self.remove_space,
             self.remove_comma,
@@ -41,6 +47,10 @@ class BalanceSheet(MopsSpider):
         return value
 
     def subject_reference(self, value: str) -> dict:
+        '''
+        Get subject belong to which component, and its aggregation subject name.
+        The aggregation subject name is as a flag to note that the component needs to be reset.
+        '''
         reference = {
             'current_assets': {
                 'component': 'assets', 'aggregate_subject': 'total_assets'
