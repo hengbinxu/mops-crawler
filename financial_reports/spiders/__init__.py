@@ -2,7 +2,7 @@
 #
 # Please refer to the documentation for information on how to create and manage
 # your spiders.
-import re
+import re, os
 
 from scrapy import Spider
 from scrapy import Request
@@ -61,7 +61,7 @@ class MopsSpider(Spider):
                 yield mops_request_info.request_info
 
     def start_requests(self):
-        for url_info in self.start_urls:
+        for idx, url_info in enumerate(self.start_urls):
             url = url_info['request_url']
             method = url_info['method']
             query_parameters = url_info['query_parameters']
@@ -69,4 +69,7 @@ class MopsSpider(Spider):
                 url, callback=self.parse,
                 method=method, cb_kwargs=query_parameters
             )
-            
+            env = os.environ.get('ENV', "dev")
+            if env == 'dev':
+                if idx > 1:
+                    break
