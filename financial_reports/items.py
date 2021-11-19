@@ -55,11 +55,15 @@ class BalanceSheetItem(BaseItem):
     value = Field()
 
 
+class CashFlowItem(BaseItem):
+    category = Field()
+    subject = Field()
+    value = Field()
+
+
 class IncomeStatementItem(BaseItem):
     pass
 
 
 
-class CashFlowItem(BaseItem):
-    pass
 

@@ -35,6 +35,23 @@ class MopsSpider(Spider):
         value = replace_pat.sub('', value)
         return value.replace(' ', ',')
 
+    def remove_parentheses(self, value: str) -> str:
+        replace_pat = re.compile('[\(|\)]')
+        value = replace_pat.sub('', value)
+        return value
+
+    def value_processor(self, value: str) -> str:
+        '''
+        Data clear function to clean values.
+        '''
+        process_funcs = [
+            self.remove_space,
+            self.remove_comma,
+        ]
+        for func in process_funcs:
+            value = func(value)
+        return value
+
     @property
     def start_urls(self):
         for company_info in CompanyList.get_company_list():

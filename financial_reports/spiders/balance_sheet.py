@@ -34,18 +34,6 @@ class BalanceSheet(MopsSpider):
             value = func(value)
         return value
 
-    def value_processor(self, value: str) -> str:
-        '''
-        Data clear function to clean values.
-        '''
-        process_funcs = [
-            self.remove_space,
-            self.remove_comma,
-        ]
-        for func in process_funcs:
-            value = func(value)
-        return value
-
     def subject_reference(self, value: str) -> dict:
         '''
         Get subject belong to which component, and its aggregation subject name.
