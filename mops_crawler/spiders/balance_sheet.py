@@ -1,3 +1,4 @@
+from scrapy.http import Request
 from . import MopsSpider
 
 from ..items import BalanceSheetItem
