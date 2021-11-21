@@ -8,26 +8,42 @@ class IncomeStatement(MopsSpider):
     
     name = "income_statement"
 
-    # # Below comments are for test.
-    # @property
-    # def start_urls(self):
-    #     urls = [
-    #         'https://emops.twse.com.tw/server-java/t164sb04_e?TYPEK=all&step=show&co_id=2330&year=2020&season=4&report_id=C'
-    #     ]
-    #     for url in urls:
-    #         yield url
+    # Below comments are for test.
+    @property
+    def start_urls(self):
+        urls = [
+            'https://emops.twse.com.tw/server-java/t164sb04_e?TYPEK=all&step=show&co_id=2330&year=2020&season=4&report_id=C'
+        ]
+        for url in urls:
+            yield url
 
-    # def start_requests(self):
-    #     query_parameters = {
-    #         'co_id': '2330',
-    #         'year': '2020',
-    #         'season': '4',
-    #     }
-    #     for url in self.start_urls:
-    #         yield Request(
-    #             url, callback=self.parse,
-    #             method='GET', cb_kwargs=query_parameters
-    #         )
+    def start_requests(self):
+        query_parameters = {
+            'co_id': '2330',
+            'year': '2020',
+            'season': '4',
+        }
+        for url in self.start_urls:
+            yield Request(
+                url, callback=self.parse,
+                method='GET', cb_kwargs=query_parameters
+            )
+
+    def subject_reference(self, value: str) -> str:
+        reference = {
+            'Operating expenses': {
+                'aggregate_subject': 'Total operating expenses',
+            },
+            'Non-operating income and expenses': {
+                'aggregate_subject': 'Total non-operating income and expenses',
+            },
+            'Other comprehensive income': {
+                'aggregate_subject': 'Total comprehensive income',
+            },
+            'Profit (loss), attributable to:': {},
+            'Basic earnings per share': {},
+            'Diluted earnings per share': {},
+        }
 
     def subject_processor(self, value: str) -> str:
         '''

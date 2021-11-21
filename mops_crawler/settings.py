@@ -1,7 +1,7 @@
 import random
 
 random.seed(1120)
-# Scrapy settings for financial_reports project
+# Scrapy settings for mops_crawler project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -10,14 +10,14 @@ random.seed(1120)
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'financial_reports'
+BOT_NAME = 'mops_crawler'
 
-SPIDER_MODULES = ['financial_reports.spiders']
-NEWSPIDER_MODULE = 'financial_reports.spiders'
+SPIDER_MODULES = ['mops_crawler.spiders']
+NEWSPIDER_MODULE = 'mops_crawler.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'financial_reports (+http://www.yourdomain.com)'
+#USER_AGENT = 'mops_crawler (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -58,13 +58,13 @@ DEFAULT_REQUEST_HEADERS = {
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'financial_reports.middlewares.FinancialReportsSpiderMiddleware': 543,
+#    'mops_crawler.middlewares.MopsCrawlerSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'financial_reports.middlewares.FinancialReportsDownloaderMiddleware': 543,
+#    'mops_crawler.middlewares.MopsCrawlerDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -76,7 +76,7 @@ DEFAULT_REQUEST_HEADERS = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 # ITEM_PIPELINES = {
-#    'financial_reports.pipelines.FinancialReportsPipeline': 300,
+#    'mops_crawler.pipelines.MopsCrawlerPipeline': 300,
 # }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
