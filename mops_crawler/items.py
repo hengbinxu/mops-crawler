@@ -68,6 +68,8 @@ class EquityChangeItem(BaseItem):
 
 
 class IncomeStatementItem(BaseItem):
-    pass
+    category = Field()
+    subject = Field()
+    value = Field()
 
 

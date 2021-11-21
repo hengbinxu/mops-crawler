@@ -12,7 +12,8 @@ class IncomeStatement(MopsSpider):
     @property
     def start_urls(self):
         urls = [
-            'https://emops.twse.com.tw/server-java/t164sb04_e?TYPEK=all&step=show&co_id=2330&year=2020&season=4&report_id=C'
+            'https://emops.twse.com.tw/server-java/t164sb04_e?TYPEK=all&step=show&co_id=2330&year=2020&season=4&report_id=C',
+            'https://emops.twse.com.tw/server-java/t164sb04_e?TYPEK=all&step=show&co_id=2303&year=2015&season=4&report_id=C'
         ]
         for url in urls:
             yield url
@@ -29,21 +30,28 @@ class IncomeStatement(MopsSpider):
                 method='GET', cb_kwargs=query_parameters
             )
 
-    def subject_reference(self, value: str) -> str:
+    def subject_reference(self, value: str) -> dict:
         reference = {
-            'Operating expenses': {
-                'aggregate_subject': 'Total operating expenses',
+            'operating_expenses': {
+                'aggregate_subject': 'total_operating_expenses',
             },
-            'Non-operating income and expenses': {
-                'aggregate_subject': 'Total non-operating income and expenses',
+            'non_operating_income_and_expenses': {
+                'aggregate_subject': 'total_non_operating_income_and_expenses',
             },
-            'Other comprehensive income': {
-                'aggregate_subject': 'Total comprehensive income',
+            'other_comprehensive_income': {
+                'aggregate_subject': 'total_comprehensive_income',
             },
-            'Profit (loss), attributable to:': {},
-            'Basic earnings per share': {},
-            'Diluted earnings per share': {},
+            'profit_loss_attributable_to:': {
+                'aggregate_subject': None
+            },
+            'basic_earnings_per_share': {
+                'aggregate_subject': 'total_basic_earnings_per_share'
+            },
+            'diluted_earnings_per_share': {
+                'aggregate_subject': 'total_diluted_earnings_per_share'
+            },
         }
+        return reference[value]
 
     def subject_processor(self, value: str) -> str:
         '''
@@ -52,54 +60,55 @@ class IncomeStatement(MopsSpider):
         process_funcs = [
             self.to_lowercase,
             self.remove_space,
+            self.remove_comma,
             self.remove_parentheses,
-            self.replace_space
+            self.replace_space,
         ]
         for func in process_funcs:
             value = func(value)
         return value
 
     def parse(self, response, **kwargs):
-        raise NotImplementedError
         #! Need to modify
         unit = response.css('.in-w-10::text').getall()[-1]
         unit = self.process_unit(unit)
-        # Only use the first table
-        table_content = response.css('table.hasBorder')[0]
-        # Get all column names
-        column_names = table_content.css('tr.in-l-12 > td::text').getall()
-        column_names = [self.subject_processor(col_name) for col_name in column_names]
-        # Get all rows that we need.
-        table_rows = table_content.css('tr:not([class="in-l-12"])')
+        # Get rows that we want to extract.
+        table_rows = response.css('table.hasBorder > tr:not([class="bl-d-12"])')
 
-        # for row in table_rows:
-        #     all_rows_tags = row.css('td')
-        #     # Get accounting title
-        #     accounting_title_tag = all_rows_tags.pop(0)
-        #     accounting_title = accounting_title_tag.css('td::text').get()
-        #     accounting_title = self.subject_processor(accounting_title)
+        category, agg_subject = '', ''
+        for row in table_rows:
+            income_statement_item = IncomeStatementItem()
+            income_statement_item['company_id'] = kwargs['co_id']
+            income_statement_item['year'] = kwargs['year']
+            income_statement_item['season'] = kwargs['season']
+            row_values = row.css('td::text').getall()        
+            if len(row_values) == 1 and\
+                self.subject_processor(row_values[0]) != 'profit_loss':
+                category = self.subject_processor(row_values[0])
+                refer_info = self.subject_reference(category)
+                agg_subject = refer_info['aggregate_subject']
+                continue
 
-        #     assert len(column_names) == len(all_rows_tags),\
-        #         ValueError((
-        #             "The length of columns and values should be the same. "
-        #             "column_names: {}, length: {};"
-        #             "values: {}, length: {}"
-        #         ).format(column_names, len(column_names), all_rows_tags, len(all_rows_tags)))
+            # Handle when profit_loss is None
+            try:
+                subject, value, _ = row_values
+            except ValueError:
+                subject = row_values
+                category, value = None, ""
 
-        #     # Populate data into data model.
-        #     for col_name, value_tag in zip(column_names, all_rows_tags):
-        #         income_statement_item = IncomeStatementItem()
-        #         income_statement_item['company_id'] = kwargs['co_id']
-        #         income_statement_item['year'] = kwargs['year']
-        #         income_statement_item['season'] = kwargs['season']
-        #         income_statement_item['accounting_title'] = accounting_title
-        #         income_statement_item['subject'] = col_name
-        #         value = value_tag.css('td::text').get()
-        #         try:
-        #             value = self.value_processor(value)
-        #         except AttributeError:
-        #             pass
-        #         income_statement_item['value'] = value
+            subject = self.subject_processor(subject)
+            value = self.value_processor(value)
+            income_statement_item['category'] = category
+            income_statement_item['subject'] = subject
+            income_statement_item['value'] = value
 
-        #         yield income_statement_item
+            # Reset category
+            if subject == agg_subject:
+                category = ''
+
+            yield income_statement_item
+
+        
+
+           
 
