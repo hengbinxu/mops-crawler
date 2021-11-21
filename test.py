@@ -1,6 +1,6 @@
 import argparse
 
-from financial_reports.request_info import *
+from mops_crawler.request_info import *
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser('Test regarding of functions')
