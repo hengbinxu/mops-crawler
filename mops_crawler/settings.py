@@ -10,6 +10,8 @@ random.seed(1120)
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
+ENV = 'dev'
+
 BOT_NAME = 'mops_crawler'
 
 SPIDER_MODULES = ['mops_crawler.spiders']
@@ -76,7 +78,7 @@ DEFAULT_REQUEST_HEADERS = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 # ITEM_PIPELINES = {
-#    'mops_crawler.pipelines.MopsCrawlerPipeline': 300,
+#    'mops_crawler.pipelines.CsvExportPipeline': 300,
 # }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -102,3 +104,5 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Output file encoding
 FEED_EXPORT_ENCODING = 'utf-8'
+
+REPORTS_OUTPUT_DIR = './reports_output'

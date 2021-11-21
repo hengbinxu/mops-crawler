@@ -41,7 +41,7 @@ class CashFlow(MopsSpider):
             value = func(value)
         return value
 
-    def subject_reference(self, value: str) -> str:
+    def subject_reference(self, value: str) -> dict:
         reference = {
             'cash_flows_from_used_in_operating_activities_indirect_method': {
                 'category': 'operating',

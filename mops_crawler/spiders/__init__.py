@@ -9,6 +9,7 @@ from scrapy import Request
 
 from ..request_info import MopsRequestInfo, AFTER_IFRS_YEARS
 from ..company_list import CompanyList
+from ..settings import ENV
 
 class MopsSpider(Spider):
     
@@ -69,7 +70,6 @@ class MopsSpider(Spider):
                 url, callback=self.parse,
                 method=method, cb_kwargs=query_parameters
             )
-            env = os.environ.get('ENV', "dev")
-            if env == 'dev':
+            if ENV == 'dev':
                 if idx > 1:
                     break
