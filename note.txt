@@ -50,3 +50,6 @@ form_data: {
 
 # Distribution Profile of Share Ownership 
 https://emops.twse.com.tw/server-java/t16sn02_e1?step=show&co_id=202111TX&year=2021
+
+Scrapy export to csv:
+ - https://www.learncodewithmike.com/2021/01/scrapy-export-csv-files.html
