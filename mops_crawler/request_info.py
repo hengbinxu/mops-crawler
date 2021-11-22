@@ -140,7 +140,7 @@ class MopsRequestInfo():
             'query_parameters': params.query_params,
         }
         if request_method == 'GET':
-            # If the reuquest method is GET, it will concate the url and parameters.s
+            # If the reuquest method is GET, it will concate the url and parameters.
             concate_params = params.concate_params()
             url = url + '?' + concate_params
         return_info['request_url'] = url

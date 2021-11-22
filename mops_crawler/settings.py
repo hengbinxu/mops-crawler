@@ -30,7 +30,7 @@ ROBOTSTXT_OBEY = False
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = random.uniform(0.75, 3)
+DOWNLOAD_DELAY = random.uniform(3, 5)
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -78,7 +78,8 @@ DEFAULT_REQUEST_HEADERS = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 # ITEM_PIPELINES = {
-#    'mops_crawler.pipelines.CsvExportPipeline': 300,
+#     'mops_crawler.pipelines.CsvExportPipeline': 300,
+#     'mops_crawler.pipelines.MultiExportPipeline': 200
 # }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
