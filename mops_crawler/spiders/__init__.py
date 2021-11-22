@@ -55,8 +55,10 @@ class MopsSpider(Spider):
 
     @property
     def start_urls(self):
-        for company_info in CompanyList.get_company_list():
+        for idx, company_info in enumerate(CompanyList.get_company_list()):
             company_id = company_info['company_id']
+            if ENV == 'dev' and idx == 1:
+                break
             for year in AFTER_IFRS_YEARS:
                 mops_request_info = MopsRequestInfo(self.name, company_id, year)
                 yield mops_request_info.request_info
@@ -69,11 +71,7 @@ class MopsSpider(Spider):
             yield Request(
                 url, callback=self.parse,
                 method=method, cb_kwargs=query_parameters
-            )
-            if ENV == 'dev':
-                if idx > 1:
-                    break
-            
+            )            
             self.logger.info((
                 'Send request with url: {}, method: {}, query_parameter: {}'
             ).format(url, method, query_parameters))
