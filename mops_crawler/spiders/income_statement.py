@@ -8,50 +8,51 @@ class IncomeStatement(MopsSpider):
     
     name = "income_statement"
 
-    # Below comments are for test.
-    @property
-    def start_urls(self):
-        urls = [
-            'https://emops.twse.com.tw/server-java/t164sb04_e?TYPEK=all&step=show&co_id=2330&year=2020&season=4&report_id=C',
-            'https://emops.twse.com.tw/server-java/t164sb04_e?TYPEK=all&step=show&co_id=2303&year=2015&season=4&report_id=C'
-        ]
-        for url in urls:
-            yield url
+    _reference = {
+        'operating_expenses': {
+            'aggregate_subject': 'total_operating_expenses',
+        },
+        'non_operating_income_and_expenses': {
+            'aggregate_subject': 'total_non_operating_income_and_expenses',
+        },
+        'other_comprehensive_income': {
+            'aggregate_subject': 'total_comprehensive_income',
+        },
+        'profit_loss_attributable_to:': {
+            'aggregate_subject': None
+        },
+        'basic_earnings_per_share': {
+            'aggregate_subject': 'total_basic_earnings_per_share'
+        },
+        'diluted_earnings_per_share': {
+            'aggregate_subject': 'total_diluted_earnings_per_share'
+        },
+    }
 
-    def start_requests(self):
-        query_parameters = {
-            'co_id': '2330',
-            'year': '2020',
-            'season': '4',
-        }
-        for url in self.start_urls:
-            yield Request(
-                url, callback=self.parse,
-                method='GET', cb_kwargs=query_parameters
-            )
+    # Below comments are for test.
+    # @property
+    # def start_urls(self):
+    #     urls = [
+    #         'https://emops.twse.com.tw/server-java/t164sb04_e?TYPEK=all&step=show&co_id=2330&year=2020&season=4&report_id=C',
+    #         'https://emops.twse.com.tw/server-java/t164sb04_e?TYPEK=all&step=show&co_id=2303&year=2015&season=4&report_id=C'
+    #     ]
+    #     for url in urls:
+    #         yield url
+
+    # def start_requests(self):
+    #     query_parameters = {
+    #         'co_id': '2330',
+    #         'year': '2020',
+    #         'season': '4',
+    #     }
+    #     for url in self.start_urls:
+    #         yield Request(
+    #             url, callback=self.parse,
+    #             method='GET', cb_kwargs=query_parameters
+    #         )
 
     def subject_reference(self, value: str) -> dict:
-        reference = {
-            'operating_expenses': {
-                'aggregate_subject': 'total_operating_expenses',
-            },
-            'non_operating_income_and_expenses': {
-                'aggregate_subject': 'total_non_operating_income_and_expenses',
-            },
-            'other_comprehensive_income': {
-                'aggregate_subject': 'total_comprehensive_income',
-            },
-            'profit_loss_attributable_to:': {
-                'aggregate_subject': None
-            },
-            'basic_earnings_per_share': {
-                'aggregate_subject': 'total_basic_earnings_per_share'
-            },
-            'diluted_earnings_per_share': {
-                'aggregate_subject': 'total_diluted_earnings_per_share'
-            },
-        }
-        return reference[value]
+        return self._reference[value]
 
     def subject_processor(self, value: str) -> str:
         '''
@@ -69,32 +70,39 @@ class IncomeStatement(MopsSpider):
         return value
 
     def parse(self, response, **kwargs):
-        #! Need to modify
         unit = response.css('.in-w-10::text').getall()[-1]
         unit = self.process_unit(unit)
         # Get rows that we want to extract.
         table_rows = response.css('table.hasBorder > tr:not([class="bl-d-12"])')
 
+        # List the subjects, if it doesn't have value, it will ignore to record.
+        ignore_subjects = {
+            'profit_loss', 'net_operating_income_loss'
+        }
         category, agg_subject = '', ''
         for row in table_rows:
             income_statement_item = IncomeStatementItem()
             income_statement_item['company_id'] = kwargs['co_id']
             income_statement_item['year'] = kwargs['year']
             income_statement_item['season'] = kwargs['season']
+            income_statement_item['unit'] = unit
             row_values = row.css('td::text').getall()        
             if len(row_values) == 1 and\
-                self.subject_processor(row_values[0]) != 'profit_loss':
+                self.subject_processor(row_values[0]) in self._reference:
                 category = self.subject_processor(row_values[0])
                 refer_info = self.subject_reference(category)
                 agg_subject = refer_info['aggregate_subject']
                 continue
 
-            # Handle when profit_loss is None
             try:
                 subject, value, _ = row_values
             except ValueError:
-                subject = row_values
-                category, value = None, ""
+                subject, *_ = row_values
+
+                if subject in ignore_subjects:
+                    continue
+                else:
+                    value = ''
 
             subject = self.subject_processor(subject)
             value = self.value_processor(value)
@@ -107,8 +115,4 @@ class IncomeStatement(MopsSpider):
                 category = ''
 
             yield income_statement_item
-
-        
-
-           
 
