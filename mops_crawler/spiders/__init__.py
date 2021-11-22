@@ -2,7 +2,7 @@
 #
 # Please refer to the documentation for information on how to create and manage
 # your spiders.
-import re, os
+import re, time, random
 
 from scrapy import Spider
 from scrapy import Request
@@ -73,3 +73,10 @@ class MopsSpider(Spider):
             if ENV == 'dev':
                 if idx > 1:
                     break
+            
+            self.logger.info((
+                'Send request with url: {}, method: {}, query_parameter: {}'
+            ).format(url, method, query_parameters))
+            # Setting sleep time
+            sleep_time = random.uniform(3, 5)
+            time.sleep(sleep_time)
