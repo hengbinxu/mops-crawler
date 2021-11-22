@@ -78,8 +78,8 @@ DEFAULT_REQUEST_HEADERS = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 # ITEM_PIPELINES = {
-#     'mops_crawler.pipelines.CsvExportPipeline': 300,
-#     'mops_crawler.pipelines.MultiExportPipeline': 200
+#     # 'mops_crawler.pipelines.CsvExportPipeline': 300,
+#     # 'mops_crawler.pipelines.MultiExportPipeline': 200
 # }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
