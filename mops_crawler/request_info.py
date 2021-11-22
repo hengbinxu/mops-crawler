@@ -40,11 +40,8 @@ class QueryParamter():
 
     @property
     def query_params(self) -> dict:
-        if not self.company_id or len(self.company_id) != 4:
-            raise ValueError(
-                "co_id can't be empty string and "
-                "its lenght must be equal to 4."
-            )
+        if not self.company_id:
+            raise ValueError("co_id can't be empty string")
         query_params = {
             'co_id': self.company_id,
             'year': self.year,
