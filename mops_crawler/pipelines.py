@@ -18,7 +18,7 @@ from itemadapter import ItemAdapter
 
 class CsvExportPipeline:
 
-    FILE_EXTENSION = '.csv'
+    FILE_EXTENSION = 'csv'
 
     def __init__(self, reports_output_dir):
         self.reports_output_dir = reports_output_dir
@@ -30,9 +30,11 @@ class CsvExportPipeline:
         )
 
     def open_spider(self, spider: Spider):
-        file_name = spider.name + self.FILE_EXTENSION
+        # mkdir file directory and get file name
         pathlib.Path(self.reports_output_dir).mkdir(parents=True, exist_ok=True)
+        file_name = '{}.{}'.format(spider.name, self.FILE_EXTENSION)
         output_file_path = os.path.join(self.reports_output_dir, file_name)
+        # Open the file and instantiate CsvItemExporter
         self.file = open(output_file_path, 'wb')
         self.exporter = CsvItemExporter(self.file, encoding='utf-8')
         self.exporter.start_exporting()
@@ -47,8 +49,13 @@ class CsvExportPipeline:
 
 
 class MultiExportPipeline():
-
-    FILE_EXTENSION = '.csv'
+    '''
+    The data pipeline is used for exporting multiple csv files by each request.
+    But it needs to notice that IOError: Too many open files, all of the requests can be 
+    separated into mini batch. The default file descriptors of MacOS is 256, it can be 
+    modified by ulimit command.
+    '''
+    FILE_EXTENSION = 'csv'
 
     def __init__(self, output_dir: str, crawler_obj: Crawler):
         self.output_dir = output_dir
@@ -60,7 +67,7 @@ class MultiExportPipeline():
         self.crawler_obj.signals.connect(self.close_spidr, signal=signals.spider_closed)      
 
     def get_file_name(self, company_id: str, year: str) -> str:
-        file_name = '{company_id}-{year}{file_extension}'.format(
+        file_name = '{company_id}-{year}.{file_extension}'.format(
             company_id=company_id,
             year=year,
             file_extension=self.FILE_EXTENSION
