@@ -76,5 +76,5 @@ class MopsSpider(Spider):
                 'Send request with url: {}, method: {}, query_parameter: {}'
             ).format(url, method, query_parameters))
             # Setting sleep time
-            sleep_time = random.uniform(3, 5)
+            sleep_time = random.uniform(1.5, 2.5)
             time.sleep(sleep_time)
