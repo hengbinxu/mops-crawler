@@ -54,7 +54,6 @@ DEFAULT_REQUEST_HEADERS = {
     ),
     'Accept-Encoding': 'gzip, deflate, br',
     'Accept-Language': 'en-US,en;q=0.9,zh-TW;q=0.8,zh;q=0.7',
-    'Host': 'emops.twse.com.tw',
 }
 
 # Enable or disable spider middlewares
@@ -77,10 +76,10 @@ DEFAULT_REQUEST_HEADERS = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-# ITEM_PIPELINES = {
-#     # 'mops_crawler.pipelines.CsvExportPipeline': 300,
-#     # 'mops_crawler.pipelines.MultiExportPipeline': 200
-# }
+ITEM_PIPELINES = {
+    'mops_crawler.pipelines.CsvExportPipeline': 200,
+    'mops_crawler.pipelines.MultiExportPipeline': 300
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
