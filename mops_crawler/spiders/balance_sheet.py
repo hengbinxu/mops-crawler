@@ -14,17 +14,27 @@ class BalanceSheet(MopsSpider):
 
     # Below are for test
     # start_urls = [
-    #     'https://emops.twse.com.tw/server-java/t164sb03_e?TYPEK=all&step=show&co_id=2330&year=2020&season=4&report_id=C'
+    #     'https://emops.twse.com.tw/server-java/t164sb03_e?TYPEK=all&step=show&co_id=2330&year=2020&season=4&report_id=C',
+    #     'https://emops.twse.com.tw/server-java/t164sb03_e?co_id=2881&year=2019&season=4&step=show&TYPEK=all&report_id=C',
+    #     'https://emops.twse.com.tw/server-java/t164sb03_e?co_id=2867&year=2019&season=4&step=show&TYPEK=all&report_id=C',
+    #     'https://emops.twse.com.tw/server-java/t164sb03_e?co_id=2897&year=2017&season=4&step=show&TYPEK=all&report_id=C',
+    #     'https://emops.twse.com.tw/server-java/t164sb03_e?co_id=3338&year=2018&season=4&step=show&TYPEK=all&report_id=C'
+    # ]
+
+    # query_parameter = [
+    #     {'co_id': '2330', 'year': '2020', 'season': '4'},
+    #     {'co_id': '2881', 'year': '2019', 'season': '4'},
+    #     {'co_id': '2867', 'year': '2019', 'season': '4'},
+    #     {'co_id': '2897', 'year': '2016', 'season': '4'},
+    #     {'co_id': '3338', 'year': '2018', 'season': 4, 'step': 'show', 'TYPEK': 'all', 'report_id': 'C'}
     # ]
 
     # def start_requests(self):
-    #     for url in self.start_urls:
-    #         request_info = {
-    #             'co_id': '2330',
-    #             'year': 2020,
-    #             'season': 4,
-    #         }
-    #         yield Request(url, callback=self.parse, method='GET', cb_kwargs=request_info)
+    #     for url, request_info in zip(self.start_urls, self.query_parameter):
+    #         yield Request(
+    #             url, callback=self.parse,
+    #             method='GET', cb_kwargs=request_info
+    #         )
 
     def subject_processor(self, value: str) -> str:
         '''
@@ -35,6 +45,7 @@ class BalanceSheet(MopsSpider):
             self.to_lowercase,
             self.replace_space,
             self.replace_symbol,
+            self.remove_quotation,
         ]
         for func in process_funcs:
             value = func(value)
@@ -61,6 +72,16 @@ class BalanceSheet(MopsSpider):
             'equity_attributable_to_owners_of_parent': {
                 'component': 'equity', 'aggregate_subject': 'total_equity'
             },
+            # Below are for handling more exception
+            'assets': {
+                'component': 'assets', 'aggregate_subject': 'total_assets'
+            },
+            'liabilities': {
+                'component': 'liabilities', 'aggregate_subject': 'total_liabilities'
+            },
+            'stockholders_equity': {
+                'component': 'equity', 'aggregate_subject': 'total_stockholders_equity'
+            }
         }
         refer_info = reference.get(value, None)
         return refer_info

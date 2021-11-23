@@ -2,6 +2,7 @@
 #
 # Please refer to the documentation for information on how to create and manage
 # your spiders.
+from os import replace
 import re, time, random
 
 from scrapy import Spider
@@ -37,7 +38,12 @@ class MopsSpider(Spider):
         return value.replace(' ', ',')
 
     def remove_parentheses(self, value: str) -> str:
-        replace_pat = re.compile('[\(|\)]')
+        replace_pat = re.compile(r'[\(|\)]')
+        value = replace_pat.sub('', value)
+        return value
+
+    def remove_quotation(self, value: str) -> str:
+        replace_pat = re.compile(r'\'|\"')
         value = replace_pat.sub('', value)
         return value
 
