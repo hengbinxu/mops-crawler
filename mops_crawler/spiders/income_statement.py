@@ -8,6 +8,11 @@ class IncomeStatement(MopsSpider):
     
     name = "income_statement"
 
+    pipeline = {
+        "CsvExportPipeline",
+        # "MultiExportPipeline",
+    }
+
     _reference = {
         'operating_expenses': {
             'aggregate_subject': 'total_operating_expenses',

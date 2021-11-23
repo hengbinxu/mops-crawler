@@ -9,6 +9,8 @@ class TWFifty(Spider):
     
     name = 'tw_fifty'
 
+    pipeline = {}
+
     @property
     def start_urls(self):
         url = ["https://www.cmoney.tw/etf/ashx/e210.ashx",]

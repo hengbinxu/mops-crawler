@@ -7,6 +7,11 @@ class BalanceSheet(MopsSpider):
     
     name = "balance_sheet"
 
+    pipeline = {
+        "CsvExportPipeline",
+        # "MultiExportPipeline",
+    }
+
     # Below are for test
     # start_urls = [
     #     'https://emops.twse.com.tw/server-java/t164sb03_e?TYPEK=all&step=show&co_id=2330&year=2020&season=4&report_id=C'

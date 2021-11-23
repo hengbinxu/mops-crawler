@@ -8,6 +8,11 @@ class EquityChange(MopsSpider):
     
     name = "equity_change"
 
+    pipeline = {
+        "CsvExportPipeline",
+        # "MultiExportPipeline",
+    }
+
     # Below comments are for test.
     # @property
     # def start_urls(self):

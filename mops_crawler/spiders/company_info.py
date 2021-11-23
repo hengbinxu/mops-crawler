@@ -11,6 +11,8 @@ class CompanyInfo(Spider):
     '''
     name = 'company_info'
 
+    pipeline = {}
+
     start_urls = [
         'https://emops.twse.com.tw/server-java/t51sb01_e',
     ]
@@ -29,6 +31,8 @@ class CompanyInfo(Spider):
     def value_processor(self, value: str) -> str:
         REPLACE_MAP = {
             '¡Ð': '',
+            #  "web_address": "¡@¡@",
+            #   "symbol": "*¡@",
         }
         replace_value = REPLACE_MAP.get(value, None)
         if replace_value is None:

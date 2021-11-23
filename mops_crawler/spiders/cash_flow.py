@@ -7,6 +7,11 @@ class CashFlow(MopsSpider):
     
     name = "cash_flow"
 
+    pipeline = {
+        "CsvExportPipeline",
+        # "MultiExportPipeline",
+    }
+
     # Below comments are for test.
     # @property
     # def start_urls(self):
