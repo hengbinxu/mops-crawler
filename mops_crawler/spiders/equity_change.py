@@ -44,7 +44,15 @@ class EquityChange(MopsSpider):
         return value
 
     def parse(self, response, **kwargs):
-        unit = response.css('.in-w-10::text').getall()[-1]
+        try:
+            unit = response.css('.in-w-10::text').getall()[-1]
+        except IndexError:
+            self.logger.info((
+                "The response doesn't have any data.\n"
+                "Request URL: {}\nquery_parameters: {}"
+            ).format(response.url, kwargs))
+            return None
+
         unit = self.process_unit(unit)
         # Only use the first table
         table_content = response.css('table.hasBorder')[0]

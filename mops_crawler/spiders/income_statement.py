@@ -34,7 +34,8 @@ class IncomeStatement(MopsSpider):
     # def start_urls(self):
     #     urls = [
     #         'https://emops.twse.com.tw/server-java/t164sb04_e?TYPEK=all&step=show&co_id=2330&year=2020&season=4&report_id=C',
-    #         'https://emops.twse.com.tw/server-java/t164sb04_e?TYPEK=all&step=show&co_id=2303&year=2015&season=4&report_id=C'
+    #         'https://emops.twse.com.tw/server-java/t164sb04_e?TYPEK=all&step=show&co_id=2303&year=2015&season=4&report_id=C',
+    #         'https://emops.twse.com.tw/server-java/t164sb04_e?co_id=5546&year=2016&season=4&step=show&TYPEK=all&report_id=C' # No data example
     #     ]
     #     for url in urls:
     #         yield url
@@ -70,7 +71,15 @@ class IncomeStatement(MopsSpider):
         return value
 
     def parse(self, response, **kwargs):
-        unit = response.css('.in-w-10::text').getall()[-1]
+        try:
+            unit = response.css('.in-w-10::text').getall()[-1]
+        except IndexError:
+            self.logger.info((
+                "The response doesn't have any data.\n"
+                "Request URL: {}\nquery_parameters: {}"
+            ).format(response.url, kwargs))
+            return None
+
         unit = self.process_unit(unit)
         # Get rows that we want to extract.
         table_rows = response.css('table.hasBorder > tr:not([class="bl-d-12"])')

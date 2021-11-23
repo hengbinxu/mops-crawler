@@ -61,7 +61,15 @@ class BalanceSheet(MopsSpider):
         return refer_info
 
     def parse(self, response, **kwargs):
-        unit = response.css('.in-w-10::text').getall()[-1]
+        try:
+            unit = response.css('.in-w-10::text').getall()[-1]
+        except IndexError:
+            self.logger.info((
+                "The response doesn't have any data.\n"
+                "Request URL: {}\nquery_parameters: {}"
+            ).format(response.url, kwargs))
+            return None
+
         unit = self.process_unit(unit)
         table_rows = response.css('.hasBorder > tr:not([class="bl-d-12"])')
         reset_component = False
