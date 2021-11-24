@@ -46,15 +46,15 @@ class IncomeStatement(MopsSpider):
     #         yield url
 
     # def start_requests(self):
-    #     query_parameters = {
-    #         'co_id': '2330',
-    #         'year': '2020',
-    #         'season': '4',
-    #     }
-    #     for url in self.start_urls:
+    #     query_parameters = [
+    #         {'co_id': '2330', 'year': '2020', 'season': '4'},
+    #         {'co_id': '2303', 'year': '2020', 'season': '4'},
+    #         {'co_id': '5546', 'year': '2020', 'season': '4'},
+    #     ]
+    #     for url, params in zip(self.start_urls, query_parameters):
     #         yield Request(
     #             url, callback=self.parse,
-    #             method='GET', cb_kwargs=query_parameters
+    #             method='GET', cb_kwargs=params
     #         )
 
     def subject_reference(self, value: str) -> dict:
@@ -69,6 +69,7 @@ class IncomeStatement(MopsSpider):
             self.remove_space,
             self.remove_comma,
             self.remove_parentheses,
+            self.spaces_to_splace,
             self.replace_space,
         ]
         for func in process_funcs:

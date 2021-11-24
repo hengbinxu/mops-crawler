@@ -47,6 +47,16 @@ class MopsSpider(Spider):
         value = replace_pat.sub('', value)
         return value
 
+    def remove_slash(self, value: str) -> str:
+        slash_pat = re.compile(r'\/')
+        value = slash_pat.sub('', value)
+        return value
+
+    def spaces_to_splace(self, value: str) -> str:
+        spaces_pat = re.compile(r'\s+')
+        value = spaces_pat.sub(' ', value)
+        return value
+
     def value_processor(self, value: str) -> str:
         '''
         Data clear function to clean values.
