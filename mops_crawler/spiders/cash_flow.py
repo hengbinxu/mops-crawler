@@ -16,29 +16,31 @@ class CashFlow(MopsSpider):
     # @property
     # def start_urls(self):
     #     urls = [
-    #         'https://emops.twse.com.tw/server-java/t164sb05_e?TYPEK=all&step=show&co_id=2330&year=2020&season=4&report_id=C'
+    #         'https://emops.twse.com.tw/server-java/t164sb05_e?TYPEK=all&step=show&co_id=2330&year=2020&season=4&report_id=C',
+    #         'https://emops.twse.com.tw/server-java/t164sb05_e?co_id=3675&year=2020&season=4&step=show&TYPEK=all&report_id=C'
     #     ]
     #     for url in urls:
     #         yield url
 
     # def start_requests(self):
-    #     query_parameters = {
-    #         'co_id': '2330',
-    #         'year': '2020',
-    #         'season': 4,
-    #     }
-    #     for url in self.start_urls:
+    #     query_parameters = [
+    #         {'co_id': '2330', 'year': '2020', 'season': 4},
+    #         {'co_id': '3675', 'year': '2020', 'season': 4},
+    #     ]
+    #     for url, params in zip(self.start_urls, query_parameters):
     #         yield Request(
     #             url, callback=self.parse,
-    #             method='GET', cb_kwargs=query_parameters
+    #             method='GET', cb_kwargs=params
     #         )
 
     def subject_processor(self, value: str) -> str:
         process_funcs = [
             self.remove_space,
             self.to_lowercase,
+            self.remove_slash,
             self.remove_comma,
             self.remove_parentheses,
+            self.spaces_to_splace,
             self.replace_space,
             self.replace_symbol,
         ]
@@ -85,9 +87,15 @@ class CashFlow(MopsSpider):
             row_values = row.css('td::text').getall()
             if len(row_values) == 1:
                 subject = self.subject_processor(row_values[0])
-                refer_info = self.subject_reference(subject)
-                category = refer_info['category']
-                agg_subject = refer_info['aggregate_subject']
+                try:
+                    refer_info = self.subject_reference(subject)
+                    category = refer_info['category']
+                    agg_subject = refer_info['aggregate_subject']
+                except KeyError:
+                    self.logger.warning((
+                        'The {} spider appear an unknown subject to get '
+                        'reference data. subject: {}'
+                    ).format(self.name, subject))
                 continue
 
             # Extract data and clean data
