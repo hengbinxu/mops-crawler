@@ -14,19 +14,21 @@ class BalanceSheet(MopsSpider):
 
     # Below are for test
     # start_urls = [
-    #     'https://emops.twse.com.tw/server-java/t164sb03_e?TYPEK=all&step=show&co_id=2330&year=2020&season=4&report_id=C',
-    #     'https://emops.twse.com.tw/server-java/t164sb03_e?co_id=2881&year=2019&season=4&step=show&TYPEK=all&report_id=C',
-    #     'https://emops.twse.com.tw/server-java/t164sb03_e?co_id=2867&year=2019&season=4&step=show&TYPEK=all&report_id=C',
-    #     'https://emops.twse.com.tw/server-java/t164sb03_e?co_id=2897&year=2017&season=4&step=show&TYPEK=all&report_id=C',
-    #     'https://emops.twse.com.tw/server-java/t164sb03_e?co_id=3338&year=2018&season=4&step=show&TYPEK=all&report_id=C'
+    #     # 'https://emops.twse.com.tw/server-java/t164sb03_e?TYPEK=all&step=show&co_id=2330&year=2020&season=4&report_id=C',
+    #     # 'https://emops.twse.com.tw/server-java/t164sb03_e?co_id=2881&year=2019&season=4&step=show&TYPEK=all&report_id=C',
+    #     # 'https://emops.twse.com.tw/server-java/t164sb03_e?co_id=2867&year=2019&season=4&step=show&TYPEK=all&report_id=C',
+    #     # 'https://emops.twse.com.tw/server-java/t164sb03_e?co_id=2897&year=2017&season=4&step=show&TYPEK=all&report_id=C',
+    #     # 'https://emops.twse.com.tw/server-java/t164sb03_e?co_id=3338&year=2018&season=4&step=show&TYPEK=all&report_id=C',
+    #     # 'https://emops.twse.com.tw/server-java/t164sb03_e?co_id=5220&year=2015&season=4&step=show&TYPEK=all&report_id=C'
     # ]
 
     # query_parameter = [
-    #     {'co_id': '2330', 'year': '2020', 'season': '4'},
-    #     {'co_id': '2881', 'year': '2019', 'season': '4'},
-    #     {'co_id': '2867', 'year': '2019', 'season': '4'},
-    #     {'co_id': '2897', 'year': '2016', 'season': '4'},
-    #     {'co_id': '3338', 'year': '2018', 'season': 4, 'step': 'show', 'TYPEK': 'all', 'report_id': 'C'}
+    #     # {'co_id': '2330', 'year': '2020', 'season': '4'},
+    #     # {'co_id': '2881', 'year': '2019', 'season': '4'},
+    #     # {'co_id': '2867', 'year': '2019', 'season': '4'},
+    #     # {'co_id': '2897', 'year': '2016', 'season': '4'},
+    #     # {'co_id': '3338', 'year': '2018', 'season': '4', 'step': 'show', 'TYPEK': 'all', 'report_id': 'C'},
+    #     # {'co_id': '5220', 'year': '2015', 'season': '4', 'step': 'show', 'TYPEK': 'all', 'report_id': 'C'},
     # ]
 
     # def start_requests(self):
@@ -43,9 +45,10 @@ class BalanceSheet(MopsSpider):
         process_funcs = [
             self.remove_space,
             self.to_lowercase,
-            self.replace_space,
             self.replace_symbol,
             self.remove_quotation,
+            self.spaces_to_splace,
+            self.replace_space,
         ]
         for func in process_funcs:
             value = func(value)
@@ -81,10 +84,22 @@ class BalanceSheet(MopsSpider):
             },
             'stockholders_equity': {
                 'component': 'equity', 'aggregate_subject': 'total_stockholders_equity'
-            }
+            },
+            'liabilities_and_equity': {
+                'component': 'liabilities_and_equity', 'aggregate_subject': 'total_liabilities_and_equity'
+            },
+            # 'share_capital': {
+            #     'component': 'equity', 'aggregate_subject': 'total_share_capital'
+            # },
+            # 'capital_surplus': {
+            #     'component': 'equity', 'aggregate_subject': 'total_capital_surplus'
+            # },
+            # 'retained_earnings': {
+            #     'component': 'equity', 'aggregate_subject': 'total_retained_earnings'
+            # }
         }
-        refer_info = reference.get(value, None)
-        return refer_info
+       
+        return reference[value]
 
     def parse(self, response, **kwargs):
         try:
@@ -99,6 +114,7 @@ class BalanceSheet(MopsSpider):
         unit = self.process_unit(unit)
         table_rows = response.css('.hasBorder > tr:not([class="bl-d-12"])')
         reset_component = False
+        refer_info = {'component': None, 'aggregate_subject': None}
         component, category, sub_category, subject = ['', '', '', '']
         for row in table_rows:
             balance_sheet_item = BalanceSheetItem()
