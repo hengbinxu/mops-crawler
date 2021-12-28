@@ -45,6 +45,7 @@ class BaseItem(scrapy.Item):
     year = Field()
     season = Field()
     unit = Field()
+    request_url = Field()
 
 
 class BalanceSheetItem(BaseItem):

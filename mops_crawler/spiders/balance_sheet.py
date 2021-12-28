@@ -121,6 +121,7 @@ class BalanceSheet(MopsSpider):
             balance_sheet_item['company_id'] = kwargs['co_id']
             balance_sheet_item['year'] = kwargs['year']
             balance_sheet_item['season'] = kwargs['season']
+            balance_sheet_item['request_url'] = kwargs['request_url']
             balance_sheet_item['unit'] = unit
             # Extract data from each row
             row_values = row.css('td::text').getall()

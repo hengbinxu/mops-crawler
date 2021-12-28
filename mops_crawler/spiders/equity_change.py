@@ -87,6 +87,7 @@ class EquityChange(MopsSpider):
                 equity_change_item['company_id'] = kwargs['co_id']
                 equity_change_item['year'] = kwargs['year']
                 equity_change_item['season'] = kwargs['season']
+                equity_change_item['request_url'] = kwargs['request_url']
                 equity_change_item['accounting_title'] = accounting_title
                 equity_change_item['subject'] = col_name
                 value = value_tag.css('td::text').get()

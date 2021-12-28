@@ -83,6 +83,7 @@ class CashFlow(MopsSpider):
             cash_flow_item['company_id'] = kwargs['co_id']
             cash_flow_item['year'] = kwargs['year']
             cash_flow_item['season'] = kwargs['season']
+            cash_flow_item['request_url'] = kwargs['request_url']
             cash_flow_item['unit'] = unit
             row_values = row.css('td::text').getall()
             if len(row_values) == 1:

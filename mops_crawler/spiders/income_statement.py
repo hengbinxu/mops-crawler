@@ -100,6 +100,7 @@ class IncomeStatement(MopsSpider):
             income_statement_item['company_id'] = kwargs['co_id']
             income_statement_item['year'] = kwargs['year']
             income_statement_item['season'] = kwargs['season']
+            income_statement_item['request_url'] = kwargs['request_url']
             income_statement_item['unit'] = unit
             row_values = row.css('td::text').getall()        
             if len(row_values) == 1 and\

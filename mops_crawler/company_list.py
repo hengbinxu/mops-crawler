@@ -8,6 +8,8 @@ class CompanyList():
 
     @classmethod
     def get_company_list(cls, file_name: Optional[str]=None) -> Generator:
+        #!TODO:
+        # It should load from databases.
         if not file_name:
             file_name = 'company_info.json'
 
