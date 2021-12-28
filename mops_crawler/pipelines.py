@@ -25,6 +25,7 @@ class CsvExportPipeline:
 
     @classmethod
     def from_crawler(cls, crawler: Crawler):
+        # Instantiate the class.
         return cls(
             reports_output_dir=crawler.settings.get('REPORTS_OUTPUT_DIR')
         )
@@ -39,18 +40,23 @@ class CsvExportPipeline:
         file_name = '{}.{}'.format(spider.name, self.FILE_EXTENSION)
         output_file_path = os.path.join(self.reports_output_dir, file_name)
         
-        # Open the file and instantiate CsvItemExporter
+        # Check wether the self.file exists or not.
+        # If not, open a new file.
         if not hasattr(self, 'file'):
             self.file = open(output_file_path, 'wb')
             self.exporter = CsvItemExporter(self.file, encoding='utf-8')
+            # Get the order of export fields
+            if hasattr(spider, '_export_fields'):
+                self.exporter.fields_to_export = spider._export_fields
             self.exporter.start_exporting()
         
         self.exporter.export_item(item)
         return item
 
     def close_spider(self, spider: Spider):
-        self.exporter.finish_exporting()
-        self.file.close()
+        if hasattr(self, 'file'):
+            self.exporter.finish_exporting()
+            self.file.close()
 
         spider.logger.info((
             '{} successfully close file and exporter.'
@@ -113,6 +119,9 @@ class MultiExportPipeline():
         except KeyError:
             f = open(output_file_path, 'wb')
             exporter = CsvItemExporter(f)
+            # Get the order of export fields
+            if hasattr(spider, '_export_fields'):
+                self.exporter.fields_to_export = spider._export_fields
             exporter.start_exporting()
             exporter.export_item(item)
             self.exporter_container[output_file_path] = {'file': f, 'exporter': exporter}
@@ -131,3 +140,6 @@ class MultiExportPipeline():
 
 # export-scrapy-items-to-different-files
 # https://stackoverflow.com/questions/50083638/export-scrapy-items-to-different-files
+
+# export the order of fields
+# https://stackoverflow.com/questions/20753358/how-can-i-use-the-fields-to-export-attribute-in-baseitemexporter-to-order-my-scr

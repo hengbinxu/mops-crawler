@@ -12,6 +12,11 @@ class EquityChange(MopsSpider):
         "CsvExportPipeline",
         # "MultiExportPipeline",
     }
+    # Define the order of export fileds
+    _export_fields = [
+        'company_id', 'year', 'season', 'accounting_title',
+        'subject', 'value', 'unit', 'request_url'
+    ]
 
     # Below comments are for test.
     # @property

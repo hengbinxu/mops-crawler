@@ -11,6 +11,12 @@ class BalanceSheet(MopsSpider):
         "CsvExportPipeline",
         # "MultiExportPipeline",
     }
+    # Define the order of export fileds
+    _export_fields = [
+        'company_id', 'year', 'season', 'component',
+        'category', 'sub_category', 'subject', 'value',
+        'unit', 'request_url'
+    ]
 
     # Below are for test
     # start_urls = [

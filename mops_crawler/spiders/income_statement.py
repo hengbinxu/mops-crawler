@@ -12,6 +12,11 @@ class IncomeStatement(MopsSpider):
         "CsvExportPipeline",
         # "MultiExportPipeline",
     }
+    # Define the order of export fileds
+    _export_fields = [
+        'company_id', 'year', 'season', 'category',
+        'subject', 'value', 'unit', 'request_url'
+    ]
 
     _reference = {
         'operating_expenses': {
