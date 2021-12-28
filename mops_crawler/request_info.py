@@ -115,6 +115,14 @@ class MopsRequestInfo():
             company_id: str,
             year: int
         ):
+        self.__all_report_names = set(self.REQUEST_INFO.keys())
+        # Validate the report_name
+        if report_name is None or\
+            not isinstance(report_name, str):
+            raise ValueError((
+                "The report_name can't be None, and it should be "
+                "included in {}"
+            ).format(self.__all_report_names))
         self.report_name = report_name
         self.company_id = company_id
         self.year = year
