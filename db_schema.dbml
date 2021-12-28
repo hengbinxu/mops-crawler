@@ -1,0 +1,115 @@
+Table company_information {
+    
+    company_id varchar(128) [primary key]
+    company_name varchar(255) [not null]
+    market varchar(255) [default: null]
+    place_of_incorporation_of_foreign_companies varchar(255) [default: null]
+    industry varchar(255) [default: null]
+    symbol varchar(255) [default: null]
+    date_of_listing datetime [default: null]
+    chariman varchar(255) [default: null]
+    general_manager varchar(255) [default: null]
+    spokesman varchar(255) [default: null]
+    title_of_spokersman varchar(255) [default: null]
+    fiscal_year_end varchar(255) [default: null]
+    accounting_firm varchar(255) [default: null]
+    cpa_1 varchar(255) [default: null]
+    cpa_2 varchar(255) [default: null]
+    address varchar(512) [default: null]
+    telephone varchar(255) [default: null]
+    fax varchar(255) [default: null]
+    email varchar(255) [default: null]
+    web_address varchar(255) [default: null]
+    investor_relations_contact_person varchar(255) [default: null]
+    title_of_ir_contact_person varchar(255) [default: null]
+    telephon_of_ir_contact_person varchar(255) [default: null]
+    email_of_ir_contact_person varchar(255) [default: null]
+
+    created_time datetime [default: `now()`]
+    updated_time datetime [default: `now()`]
+}
+
+Table time {
+    time_id int [primary key, increment]
+    year smallint
+    season smallint
+
+    indexes {
+        (year, season) [unique]
+    }
+}
+
+Table BalanceSheet {
+    company_id varchar(128) [not null, ref: > company_information.company_id]
+    time_id int [not null, ref: > time.time_id]
+    unit varchar(255) [not null]
+    component varchar(255) [default: null]
+    category varchar(255) [default: null]
+    sub_category varchar(255) [default: null]
+    subject varchar(255) [not null]
+    value varchar(255) [not null]
+
+    request_url varchar(255) [not null]
+    created_time datetime [default: `now()`]
+    updated_time datetime [default: `now()`]
+    
+    indexes {
+        (company_id, time_id, subject) [unique]
+    }
+}
+
+Table CashFlow {
+    company_id varchar(128) [not null, ref: > company_information.company_id]
+    time_id int [not null, ref: > time.time_id]
+    unit varchar(255) [not null]
+    category varchar(255) [default: null]
+    subject varchar(255) [not null]
+    value varchar(255) [not null]
+
+    request_url varchar(255) [not null]
+    created_time datetime [default: `now()`]
+    updated_time datetime [default: `now()`]
+
+    indexes {
+        (company_id, time_id, subject) [unique]
+    }
+}
+
+Table IncomeStatement {
+    company_id varchar(128) [not null, ref: > company_information.company_id]
+    time_id int [not null, ref: > time.time_id]
+    unit varchar(255) [not null]
+    category varchar(255) [default: null]
+    subject varchar(255) [not null]
+    value varchar(255) [not null]
+
+    request_url varchar(255) [not null]
+    created_time datetime [default: `now()`]
+    updated_time datetime [default: `now()`]
+
+    indexes {
+        (company_id, time_id, subject) [unique]
+    }
+}
+
+Table EquityChange {
+    company_id varchar(128) [not null, ref: > company_information.company_id]
+    time_id int [not null, ref: > time.time_id]
+    unit varchar(255) [not null]
+    category varchar(255) [default: null]
+    subject varchar(255) [not null]
+    value varchar(255) [not null]
+    request_url varchar(255) [not null]
+    created_time datetime [default: `now()`]
+    updated_time datetime [default: `now()`]
+
+    indexes {
+        (company_id, time_id, subject) [unique]
+    }
+}
+
+
+
+
+
+
