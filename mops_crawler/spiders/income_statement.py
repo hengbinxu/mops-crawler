@@ -15,7 +15,7 @@ class IncomeStatement(MopsSpider):
     # Define the order of export fileds
     _export_fields = [
         'company_id', 'year', 'season', 'category',
-        'subject', 'value', 'unit', 'request_url'
+        'subject', 'value', 'request_url'
     ]
 
     _reference = {
@@ -91,7 +91,7 @@ class IncomeStatement(MopsSpider):
             ).format(response.url, kwargs))
             return None
 
-        unit = self.process_unit(unit)
+        # unit = self.process_unit(unit)
         # Get rows that we want to extract.
         table_rows = response.css('table.hasBorder > tr:not([class="bl-d-12"])')
 
@@ -106,7 +106,7 @@ class IncomeStatement(MopsSpider):
             income_statement_item['year'] = kwargs['year']
             income_statement_item['season'] = kwargs['season']
             income_statement_item['request_url'] = kwargs['request_url']
-            income_statement_item['unit'] = unit
+            # income_statement_item['unit'] = unit
             row_values = row.css('td::text').getall()        
             if len(row_values) == 1 and\
                 self.subject_processor(row_values[0]) in self._reference:

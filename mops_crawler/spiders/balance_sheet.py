@@ -15,7 +15,7 @@ class BalanceSheet(MopsSpider):
     _export_fields = [
         'company_id', 'year', 'season', 'component',
         'category', 'sub_category', 'subject', 'value',
-        'unit', 'request_url'
+        'request_url'
     ]
 
     # Below are for test
@@ -117,7 +117,7 @@ class BalanceSheet(MopsSpider):
             ).format(response.url, kwargs))
             return None
 
-        unit = self.process_unit(unit)
+        # unit = self.process_unit(unit)
         table_rows = response.css('.hasBorder > tr:not([class="bl-d-12"])')
         reset_component = False
         refer_info = {'component': None, 'aggregate_subject': None}
@@ -128,7 +128,7 @@ class BalanceSheet(MopsSpider):
             balance_sheet_item['year'] = kwargs['year']
             balance_sheet_item['season'] = kwargs['season']
             balance_sheet_item['request_url'] = kwargs['request_url']
-            balance_sheet_item['unit'] = unit
+            # balance_sheet_item['unit'] = unit
             # Extract data from each row
             row_values = row.css('td::text').getall()
             if len(row_values) == 1:

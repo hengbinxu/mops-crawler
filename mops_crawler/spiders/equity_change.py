@@ -15,7 +15,7 @@ class EquityChange(MopsSpider):
     # Define the order of export fileds
     _export_fields = [
         'company_id', 'year', 'season', 'accounting_title',
-        'subject', 'value', 'unit', 'request_url'
+        'subject', 'value', 'request_url'
     ]
 
     # Below comments are for test.
@@ -63,7 +63,7 @@ class EquityChange(MopsSpider):
             ).format(response.url, kwargs))
             return None
 
-        unit = self.process_unit(unit)
+        # unit = self.process_unit(unit)
         # Only use the first table
         table_content = response.css('table.hasBorder')[0]
         # Get all column names
@@ -93,6 +93,7 @@ class EquityChange(MopsSpider):
                 equity_change_item['year'] = kwargs['year']
                 equity_change_item['season'] = kwargs['season']
                 equity_change_item['request_url'] = kwargs['request_url']
+                # equity_change_item['unit'] = unit
                 equity_change_item['accounting_title'] = accounting_title
                 equity_change_item['subject'] = col_name
                 value = value_tag.css('td::text').get()

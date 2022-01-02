@@ -44,7 +44,7 @@ class BaseItem(scrapy.Item):
     company_id = Field()
     year = Field()
     season = Field()
-    unit = Field()
+    # unit = Field()
     request_url = Field()
 
 

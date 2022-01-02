@@ -14,7 +14,7 @@ class CashFlow(MopsSpider):
     # Define the order of export fileds
     _export_fields = [
         'company_id', 'year', 'season', 'category',
-        'subject', 'value', 'unit', 'request_url'
+        'subject', 'value', 'request_url'
     ]
 
     # Below comments are for test.
@@ -80,7 +80,7 @@ class CashFlow(MopsSpider):
             ).format(response.url, kwargs))
             return None
 
-        unit = self.process_unit(unit)
+        # unit = self.process_unit(unit)
         table_rows = response.css('table.hasBorder > tr:not([class="bl-d-12"])')
         category, agg_subject = '', ''
         for row in table_rows:
@@ -89,7 +89,7 @@ class CashFlow(MopsSpider):
             cash_flow_item['year'] = kwargs['year']
             cash_flow_item['season'] = kwargs['season']
             cash_flow_item['request_url'] = kwargs['request_url']
-            cash_flow_item['unit'] = unit
+            # cash_flow_item['unit'] = unit
             row_values = row.css('td::text').getall()
             if len(row_values) == 1:
                 subject = self.subject_processor(row_values[0])

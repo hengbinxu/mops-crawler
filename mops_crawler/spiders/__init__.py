@@ -67,6 +67,7 @@ class MopsSpider(Spider):
         ]
         for func in process_funcs:
             value = func(value)
+        value = int(value) * 1000
         return value
 
     @property
