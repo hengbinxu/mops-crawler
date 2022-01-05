@@ -1,0 +1,11 @@
+version: '3'
+services:
+  crawler-services:
+    image: scrapy-env:1.0
+    comtainer_name: mops-crawler
+    restart: always
+    volumes:
+      - ./eggs:/var/scrapyd/eggs
+      - ./logs:/var/scrapyd//logs
+      - ./dbs:./dbs
+      - ./scrapyd.conf:./scrapyd.conf
