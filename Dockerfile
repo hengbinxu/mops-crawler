@@ -54,11 +54,11 @@ RUN set -ex\
         /usr/share/doc \
         /usr/share/doc-base\
     && mkdir -p ${SCRAPY_INFO_DIR}\
-    && chwon -R ${USER}: ${SCRAPY_INFO_DIR}
+    && chown -R ${USER}: ${SCRAPY_INFO_DIR}
 
 RUN chown -R ${USER}: ${SCRAPY_HOME}
 WORKDIR ${SCRAPY_HOME}
 EXPOSE 6800
 USER ${USER}
 
-CMD ["/bin/bash", "run.sh"]
+CMD ["bash"]
