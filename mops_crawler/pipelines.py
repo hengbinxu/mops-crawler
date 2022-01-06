@@ -75,7 +75,12 @@ class MultiExportPipeline():
     def __init__(self, output_dir: str, crawler_obj: Crawler):
         self.output_dir = output_dir
         self.crawler_obj = crawler_obj
-        self.save_folder_path = os.path.join(self.output_dir, self.crawler_obj.spider.name)
+        try:
+            spider_name = self.crawler_obj.spider.name
+        except AttributeError:
+            spider_name = 'others'
+        
+        self.save_folder_path = os.path.join(self.output_dir, spider_name)
         # Initial export data container
         self.exporter_container = dict()
         self.crawler_obj.signals.connect(self.open_spider, signal=signals.spider_opened)
