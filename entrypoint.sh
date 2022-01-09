@@ -20,3 +20,6 @@ echo ${PROJECT_NAMES[@]}
 # SCRAPYD_PID=$( scrapyd & )
 
 # scrapyd-deploy crawler_service -p mops_crawler
+
+
+# docker run --name ${NAME} -v ${LOCAL}:${CONTAINER}  
