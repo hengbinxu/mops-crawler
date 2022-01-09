@@ -1,5 +1,7 @@
 FROM python:3.8-slim-buster
 
+LABEL version="1.0"
+
 ARG USER=scrapy-user
 ARG SCRAPY_USER_HOME=/usr/local/mops-crawler
 ENV SCRAPY_HOME=${SCRAPY_USER_HOME}
@@ -12,7 +14,7 @@ ENV LC_ALL en_US.UTF-8
 ENV LC_CTYPE en_US.UTF-8
 ENV LC_MESSAGES en_US.UTF-8
 
-COPY . ${SCRAPY_HOME}
+COPY requirements.txt ${SCRAPY_HOME}/requirements.txt
 COPY scrapyd.conf /etc/scrapyd/scrapyd.conf
 
 RUN set -ex\
@@ -60,5 +62,8 @@ RUN chown -R ${USER}: ${SCRAPY_HOME}
 WORKDIR ${SCRAPY_HOME}
 EXPOSE 6800
 USER ${USER}
+
+# HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3\
+#      CMD [ "[ -f ${SCRAPY_HOME}/ ]" ]
 
 CMD ["bash"]
